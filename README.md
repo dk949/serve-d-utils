@@ -1,4 +1,4 @@
-# serve-d utils
+# serve-d-utils
 
 Utilities to use custom requests and notifications for the
 [serve-d](https://github.com/Pure-D/serve-d/) LSP.
