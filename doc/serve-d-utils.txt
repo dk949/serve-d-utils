@@ -3,9 +3,9 @@
 ==============================================================================
 CONTENTS                                                         *serve_d_utils
 
-1. Overview ................................................ |serve_d-overview|
-2. Functions ........................................ |serve_d_utils_functions|
-3. Methods ............................................ |serve_d_utils_methods|
+1. Overview ................................................. |serve_d-overview|
+2. Functions ......................................... |serve_d_utils_functions|
+3. Methods ............................................. |serve_d_utils_methods|
 
 ==============================================================================
 OVERVIEW                                                *serve_d_utils_overview*
@@ -537,4 +537,4 @@ ServeD:onInteractiveDownload(callback)     *serve_d_utils:onInteractiveDownload*
         {callback} (HandlerFor<InteractiveDownload, boolean>): A callback
         function to handle the download request.
 
-==============================================================================
+vim:tw=78:ts=8:noet:ft=help:norl:
