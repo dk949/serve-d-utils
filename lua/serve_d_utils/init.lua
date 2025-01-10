@@ -348,6 +348,9 @@ end
 ---@param callback lsp.Handler?
 ---@return table|integer
 function ServeD:runRequest(method, param, bufnr, callback)
+    assert(self ~= nil, "why is self nil")
+    assert(self.serve_d ~= nil, "why is serve_d nil")
+
     ---`request_sync` is not typed correctly, it _does_ accept nil for `bufnr`
     ---@cast bufnr integer
 
@@ -403,7 +406,7 @@ end
 ---@return ErrorOr<TextEdit[]>
 function ServeD:sortImports(param, bufnr)
     local request = "served/sortImports"
-    local res = ServeD:runRequest(request, param, bufnr, nil)
+    local res = self:runRequest(request, param, bufnr, nil)
     ---@cast res ErrorOr<TextEdit[]>
     return res
 end
@@ -416,7 +419,7 @@ end
 ---@return ErrorOr<TextEdit[]>
 function ServeD:implementMethods(param, bufnr)
     local request = "served/implementMethods"
-    local res = ServeD:runRequest(request, param, bufnr, nil)
+    local res = self:runRequest(request, param, bufnr, nil)
     ---@cast res ErrorOr<TextEdit[]>
     return res
 end
@@ -426,7 +429,7 @@ end
 ---@return ErrorOr<boolean>
 function ServeD:restartServer(bufnr)
     local request = "served/restartServer"
-    local res = ServeD:runRequest(request, {}, bufnr, nil)
+    local res = self:runRequest(request, {}, bufnr, nil)
     ---@cast res ErrorOr<boolean>
     return res
 end
@@ -453,7 +456,7 @@ end
 ---@return ErrorOr<string[]>
 function ServeD:listConfigurations(bufnr)
     local request = "served/listConfigurations"
-    local res = ServeD:runRequest(request, {}, bufnr, nil)
+    local res = self:runRequest(request, {}, bufnr, nil)
     ---@cast res ErrorOr<string[]>
     return res
 end
@@ -464,7 +467,7 @@ end
 ---@return ErrorOr<boolean>
 function ServeD:switchConfig(param, bufnr)
     local request = "served/switchConfig"
-    local res = ServeD:runRequest(request, { param }, bufnr, nil)
+    local res = self:runRequest(request, { param }, bufnr, nil)
     ---@cast res ErrorOr<boolean>
     return res
 end
@@ -475,7 +478,7 @@ end
 ---@return ErrorOr<string>
 function ServeD:getConfig(bufnr)
     local request = "served/getConfig"
-    local res = ServeD:runRequest(request, {}, bufnr, nil)
+    local res = self:runRequest(request, {}, bufnr, nil)
     ---@cast res ErrorOr<string>
     return res
 end
@@ -487,7 +490,7 @@ end
 ---@return ErrorOr<string[] | ArchTypeInfo[]>
 function ServeD:listArchTypes(param, bufnr)
     local request = "served/listArchTypes"
-    local res = ServeD:runRequest(request, param, bufnr, nil)
+    local res = self:runRequest(request, param, bufnr, nil)
     ---@cast res ErrorOr<string[] | ArchTypeInfo[]>
     return res
 end
@@ -498,7 +501,7 @@ end
 ---@return ErrorOr<boolean>
 function ServeD:switchArchType(param, bufnr)
     local request = "served/switchArchType"
-    local res = ServeD:runRequest(request, { param }, bufnr, nil)
+    local res = self:runRequest(request, { param }, bufnr, nil)
     ---@cast res ErrorOr<boolean>
     return res
 end
@@ -509,7 +512,7 @@ end
 ---@return ErrorOr<string>
 function ServeD:getArchType(bufnr)
     local request = "served/getArchType"
-    local res = ServeD:runRequest(request, {}, bufnr, nil)
+    local res = self:runRequest(request, {}, bufnr, nil)
     ---@cast res ErrorOr<string>
     return res
 end
@@ -520,7 +523,7 @@ end
 ---@return ErrorOr<string[]>
 function ServeD:listBuildTypes(bufnr)
     local request = "served/listBuildTypes"
-    local res = ServeD:runRequest(request, {}, bufnr, nil)
+    local res = self:runRequest(request, {}, bufnr, nil)
     ---@cast res ErrorOr<string[]>
     return res
 end
@@ -531,7 +534,7 @@ end
 ---@return ErrorOr<boolean>
 function ServeD:switchBuildType(param, bufnr)
     local request = "served/switchBuildType"
-    local res = ServeD:runRequest(request, { param }, bufnr, nil)
+    local res = self:runRequest(request, { param }, bufnr, nil)
     ---@cast res ErrorOr<boolean>
     return res
 end
@@ -541,7 +544,7 @@ end
 ---@return ErrorOr<string>
 function ServeD:getBuildType(bufnr)
     local request = "served/getBuildType"
-    local res = ServeD:runRequest(request, {}, bufnr, nil)
+    local res = self:runRequest(request, {}, bufnr, nil)
     ---@cast res ErrorOr<string>
     return res
 end
@@ -551,7 +554,7 @@ end
 ---@return ErrorOr<string>
 function ServeD:getCompiler(bufnr)
     local request = "served/getCompiler"
-    local res = ServeD:runRequest(request, {}, bufnr, nil)
+    local res = self:runRequest(request, {}, bufnr, nil)
     ---@cast res ErrorOr<string>
     return res
 end
@@ -562,7 +565,7 @@ end
 ---@return ErrorOr<boolean>
 function ServeD:switchCompiler(param, bufnr)
     local request = "served/switchCompiler"
-    local res = ServeD:runRequest(request, { param }, bufnr, nil)
+    local res = self:runRequest(request, { param }, bufnr, nil)
     ---@cast res ErrorOr<boolean>
     return res
 end
@@ -574,7 +577,7 @@ end
 ---@return ErrorOr<ImportModification>
 function ServeD:addImport(param, bufnr)
     local request = "served/addImport"
-    local res = ServeD:runRequest(request, param, bufnr, nil)
+    local res = self:runRequest(request, param, bufnr, nil)
     ---@cast res ErrorOr<ImportModification>
     return res
 end
@@ -586,7 +589,7 @@ end
 ---@return ErrorOr<boolean>
 function ServeD:updateImports(param, bufnr)
     local request = "served/updateImports"
-    local res = ServeD:runRequest(request, param, bufnr, nil)
+    local res = self:runRequest(request, param, bufnr, nil)
     ---@cast res ErrorOr<boolean>
     return res
 end
@@ -598,7 +601,7 @@ end
 ---@return ErrorOr<DubDependency[]>
 function ServeD:listDependencies(param, bufnr)
     local request = "served/listDependencies"
-    local res = ServeD:runRequest(request, { param }, bufnr, nil)
+    local res = self:runRequest(request, { param }, bufnr, nil)
     ---@cast res ErrorOr<DubDependency[]>
     return res
 end
@@ -609,7 +612,7 @@ end
 ---@return ErrorOr<Task[]>
 function ServeD:buildTasks(bufnr)
     local request = "served/buildTasks"
-    local res = ServeD:runRequest(request, {}, bufnr, nil)
+    local res = self:runRequest(request, {}, bufnr, nil)
     ---@cast res ErrorOr<Task[]>
     return res
 end
@@ -671,7 +674,7 @@ end
 ---@return ErrorOr<string[]>
 function ServeD:searchFile(query, bufnr)
     local request = "served/searchFile"
-    local res = ServeD:runRequest(request, { query }, bufnr, nil)
+    local res = self:runRequest(request, { query }, bufnr, nil)
     ---@cast res ErrorOr<string[]>
     return res
 end
@@ -683,7 +686,7 @@ end
 ---@return ErrorOr<string[]>
 function ServeD:findFilesByModule(module, bufnr)
     local request = "served/findFilesByModule"
-    local res = ServeD:runRequest(request, { module }, bufnr, nil)
+    local res = self:runRequest(request, { module }, bufnr, nil)
     ---@cast res ErrorOr<string[]>
     return res
 end
@@ -694,7 +697,7 @@ end
 ---@return ErrorOr<DScannerIniSection[]>
 function ServeD:getDscannerConfig(param, bufnr)
     local request = "served/getDscannerConfig"
-    local res = ServeD:runRequest(request, param, bufnr, nil)
+    local res = self:runRequest(request, param, bufnr, nil)
     ---@cast res ErrorOr<DScannerIniSection[]>
     return res
 end
@@ -705,7 +708,7 @@ end
 ---@return ErrorOr<DubConfig>
 function ServeD:getActiveDubConfig(bufnr)
     local request = "served/getActiveDubConfig"
-    local res = ServeD:runRequest(request, {}, bufnr, nil)
+    local res = self:runRequest(request, {}, bufnr, nil)
     ---@cast res ErrorOr<DubConfig>
     return res
 end
@@ -715,7 +718,7 @@ end
 ---@return ErrorOr<ProfileGCEntry[]>
 function ServeD:getProfileGCEntries(bufnr)
     local request = "served/getProfileGCEntries"
-    local res = ServeD:runRequest(request, {}, bufnr, nil)
+    local res = self:runRequest(request, {}, bufnr, nil)
     ---@cast res ErrorOr<ProfileGCEntry[]>
     return res
 end
@@ -737,7 +740,7 @@ end
 ---@return ErrorOr<ServedInfoResponse>
 function ServeD:getInfo(param, bufnr)
     local request = "served/getInfo"
-    local res = ServeD:runRequest(request, param, bufnr, nil)
+    local res = self:runRequest(request, param, bufnr, nil)
     ---@cast res ErrorOr<ServedInfoResponse>
     return res
 end
@@ -750,7 +753,7 @@ end
 ---@return ErrorOr<boolean[]>
 function ServeD:forceLoadProjects(param, bufnr)
     local request = "served/forceLoadProjects"
-    local res = ServeD:runRequest(request, param, bufnr, nil)
+    local res = self:runRequest(request, param, bufnr, nil)
     ---@cast res ErrorOr<boolean[]>
     return res
 end
