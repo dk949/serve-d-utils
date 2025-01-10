@@ -1,0 +1,540 @@
+*serve_d_utils.txt*    serve-d-utils Plugin Documentation
+
+==============================================================================
+CONTENTS                                                         *serve_d_utils
+
+1. Overview ................................................ |serve_d-overview|
+2. Functions ........................................ |serve_d_utils_functions|
+3. Methods ............................................ |serve_d_utils_methods|
+
+==============================================================================
+OVERVIEW                                                *serve_d_utils_overview*
+
+This plugin provides a thin wrapper around various custom requests and
+notifications provided by serve-d.
+
+==============================================================================
+FUNCTIONS                                              *serve_d_utils_functions*
+
+There are a few helper functions in `ServeD` to simplify finding the client
+and working with errors.
+
+`ServeD.new` is the main function which locates the client and returns a new
+`ServeD` object on which all methods will be called.
+
+See |serve_d_utils.new| and |serve_d_utils_methods|
+
+
+------------------------------------------------------------------------------
+ServeD.new(opts)                                             *serve_d_utils.new*
+
+
+    Creates a new ServeD object.
+
+    Parameters:
+        {opts} (table) Options for the ServeD instance. Available keys:
+            - `client` (vim.lsp.Client): Use a specific serve-d client.
+            - `timeout` (integer): Timeout for requests.
+            - `quiet_error` (boolean): If true, returns `nil` if no client is
+              found.
+
+    Returns:
+        (ServeD|nil) The created ServeD instance or nil if the client was not
+        found.
+
+------------------------------------------------------------------------------
+ServeD.errCodeToStr(code)                           *serve_d_utils.errCodeToStr*
+
+    Converts an LSP error code to a human-readable string.
+
+    Parameters:
+        {code} (integer): The error code to convert.
+
+    Returns:
+        (string) The string representation of the error code.
+
+------------------------------------------------------------------------------
+ServeD.unwrap(e, default)                                 *serve_d_utils.unwrap*
+
+    Unwraps an `ErrorOr<T>` object.
+
+    Parameters:
+        {e} (ErrorOr<T>): The object to unwrap.
+        {default} (T|vim.NIL): The default value if an error occurs.
+
+    Returns:
+        (T) The unwrapped value or the default if there was an error.
+
+==============================================================================
+METHODS                                                  *serve_d_utils_methods*
+
+All methods should be called on the object returned by `ServeD.new`.
+
+See |serve_d_utils.new|
+
+------------------------------------------------------------------------------
+ServeD:runRequest(method, param, bufnr, callback)     *serve_d_utils:runRequest*
+
+    Sends a request to the LSP server.
+
+    Parameters:
+        {method} (string): The LSP method to call.
+        {param} (table): Parameters for the request.
+        {bufnr} (integer?): Buffer number.
+        {callback} (function?): Callback for handling the response. Response is
+        synchtonous if {callback} is nil
+
+    Returns:
+        (table|integer) The result or request ID.
+
+------------------------------------------------------------------------------
+ServeD:sendNotification(method, param)          *serve_d_utils:sendNotification*
+
+    Sends a notification to the LSP server.
+
+    Parameters:
+        {method} (string): The LSP method to notify.
+        {param} (table): Parameters for the notification.
+
+    Returns:
+        (boolean) `true` if successful, `false` otherwise.
+
+------------------------------------------------------------------------------
+ServeD:sortImports(param, bufnr)                     *serve_d_utils:sortImports*
+
+    Sorts user imports in a block at a given position in the code.
+
+    Parameters:
+        {param} (SortImportsParams): Parameters for sorting imports.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<TextEdit[]>) The list of text edits to apply.
+
+------------------------------------------------------------------------------
+ServeD:implementMethods(param, bufnr)           *serve_d_utils:implementMethods*
+
+    Implements methods or interfaces for a specified class.
+
+    Parameters:
+        {param} (ImplementMethodsParams): Parameters for implementing methods.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<TextEdit[]>) The list of text edits to apply.
+
+------------------------------------------------------------------------------
+ServeD:restartServer(bufnr)                        *serve_d_utils:restartServer*
+
+    Restarts all DCD servers started by this serve-d instance.
+
+    Parameters:
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<boolean>) `true` if successful, `false` otherwise.
+
+------------------------------------------------------------------------------
+ServeD:killServer()                                   *serve_d_utils:killServer*
+
+    Kills all DCD servers started by this serve-d instance.
+
+    Returns:
+        (boolean) `true` if successful, `false` otherwise.
+
+------------------------------------------------------------------------------
+ServeD:updateDCD()                                     *serve_d_utils:updateDCD*
+
+    Triggers a DCD update.
+
+    Returns:
+        (boolean) `true` if successful, `false` otherwise.
+
+
+------------------------------------------------------------------------------
+ServeD:listConfigurations(bufnr)              *serve_d_utils:listConfigurations*
+
+    Lists the available dub configurations in the active instance.
+
+    Parameters:
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<string[]>) List of configuration names or an empty array if
+        none.
+
+------------------------------------------------------------------------------
+ServeD:switchConfig(param, bufnr)                   *serve_d_utils:switchConfig*
+
+    Sets the current dub configuration.
+
+    Parameters:
+        {param} (string): Configuration name.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<boolean>) `true` if successful, `false` otherwise.
+
+------------------------------------------------------------------------------
+ServeD:getConfig(bufnr)                                *serve_d_utils:getConfig*
+
+    Gets the current dub configuration.
+
+    Parameters:
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<string>) The name of the current configuration or `null`.
+
+------------------------------------------------------------------------------
+ServeD:listArchTypes(param, bufnr)                 *serve_d_utils:listArchTypes*
+
+    Lists available architectures in dub.
+
+    Parameters:
+        {param} (ListArchTypesParams): Parameters for filtering results.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<string[] | ArchTypeInfo[]>) Array of architectures or
+        additional info.
+
+------------------------------------------------------------------------------
+ServeD:switchArchType(param, bufnr)               *serve_d_utils:switchArchType*
+
+    Sets the current architecture.
+
+    Parameters:
+        {param} (string): Architecture name.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<boolean>) `true` if successful, `false` otherwise.
+
+------------------------------------------------------------------------------
+ServeD:getArchType(param, bufnr)                     *serve_d_utils:getArchType*
+
+    Gets the current architecture.
+
+    Parameters:
+        {param} (string): Architecture name.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<string>) The name of the current architecture.
+
+------------------------------------------------------------------------------
+ServeD:listBuildTypes(bufnr)                      *serve_d_utils:listBuildTypes*
+
+    Lists available build types in dub.
+
+    Parameters:
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<string[]>) Array of build types.
+
+------------------------------------------------------------------------------
+ServeD:switchBuildType(param, bufnr)             *serve_d_utils:switchBuildType*
+
+    Sets the current dub build type.
+
+    Parameters:
+        {param} (string): Build type name.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<boolean>) `true` if successful, `false` otherwise.
+
+------------------------------------------------------------------------------
+ServeD:getBuildType(bufnr)                          *serve_d_utils:getBuildType*
+
+    Gets the current dub build type.
+
+    Parameters:
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<string>) The current build type name.
+
+------------------------------------------------------------------------------
+ServeD:getCompiler(bufnr)                            *serve_d_utils:getCompiler*
+
+    Gets the name of the current compiler.
+
+    Parameters:
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<string>) The name of the current compiler.
+
+------------------------------------------------------------------------------
+ServeD:switchCompiler(param, bufnr)               *serve_d_utils:switchCompiler*
+
+    Sets the current compiler.
+
+    Parameters:
+        {param} (string): Compiler name.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<boolean>) `true` if successful, `false` otherwise.
+
+------------------------------------------------------------------------------
+ServeD:addImport(param, bufnr)                         *serve_d_utils:addImport*
+
+    Adds an import to the specified location in the code.
+
+    Parameters:
+        {param} (AddImportParams): Parameters for the import.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<ImportModification>) The modifications to apply for the
+        import.
+
+------------------------------------------------------------------------------
+ServeD:updateImports(param, bufnr)                 *serve_d_utils:updateImports*
+
+    Updates dub dependencies from the filesystem.
+
+    Parameters:
+        {param} (UpdateImportsParams): Parameters for updating imports.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<boolean>) `true` if successful, `false` otherwise.
+
+------------------------------------------------------------------------------
+ServeD:listDependencies(param, bufnr)           *serve_d_utils:listDependencies*
+
+    Lists dependencies for the given dub package name.
+
+    Parameters:
+        {param} (string): Dub package name (empty for all dependencies).
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<DubDependency[]>) Array of dependencies.
+
+------------------------------------------------------------------------------
+ServeD:buildTasks(bufnr)                              *serve_d_utils:buildTasks*
+
+    Lists build tasks for all dub instances in the project.
+
+    Parameters:
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<Task[]>) Array of build tasks.
+
+------------------------------------------------------------------------------
+ServeD:convertDubFormat(param)                  *serve_d_utils:convertDubFormat*
+
+    Converts the dub recipe file format.
+
+    Parameters:
+        {param} (DubConvertRequest): Parameters for the conversion.
+
+    Returns:
+        (boolean) `true` if successful, `false` otherwise.
+
+------------------------------------------------------------------------------
+ServeD:installDependency(param)                *serve_d_utils:installDependency*
+
+    Installs a dependency in the dub recipe file.
+
+    Parameters:
+        {param} (InstallRequest): Parameters for the dependency.
+
+    Returns:
+        (boolean) `true` if successful, `false` otherwise.
+
+------------------------------------------------------------------------------
+ServeD:updateDependency(param)                  *serve_d_utils:updateDependency*
+
+    Updates a dependency in the dub recipe file.
+
+    Parameters:
+        {param} (UpdateRequest): Parameters for the update.
+
+    Returns:
+        (boolean) `true` if successful, `false` otherwise.
+
+------------------------------------------------------------------------------
+ServeD:uninstallDependency(param)            *serve_d_utils:uninstallDependency*
+
+    Removes a dependency from the dub recipe file.
+
+    Parameters:
+        {param} (UninstallRequest): Parameters for the removal.
+
+    Returns:
+        (boolean) `true` if successful, `false` otherwise.
+
+------------------------------------------------------------------------------
+ServeD:doDscanner(param)                              *serve_d_utils:doDscanner*
+
+    Triggers DScanner linting for the specified file.
+
+    Parameters:
+        {param} (DocumentLinkParams): Parameters for the scan.
+
+    Returns:
+        (boolean) `true` if successful, `false` otherwise.
+
+------------------------------------------------------------------------------
+ServeD:searchFile(query, bufnr)                       *serve_d_utils:searchFile*
+
+    Searches for a file in the project or dependencies.
+
+    Parameters:
+        {query} (string): Filename to search.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<string[]>) Array of file paths.
+
+------------------------------------------------------------------------------
+ServeD:findFilesByModule(module, bufnr)        *serve_d_utils:findFilesByModule*
+
+    Lists files matching the specified module name.
+
+    Parameters:
+        {module} (string): Module name.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<string[]>) Array of file paths.
+
+------------------------------------------------------------------------------
+ServeD:getDscannerConfig(param, bufnr)         *serve_d_utils:getDscannerConfig*
+
+    Gets the current DScanner configuration.
+
+    Parameters:
+        {param} (DocumentLinkParams): Parameters for the request.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<DScannerIniSection[]>) DScanner configuration sections.
+
+------------------------------------------------------------------------------
+ServeD:getActiveDubConfig(bufnr)              *serve_d_utils:getActiveDubConfig*
+
+    Gets dub information for the active project.
+
+    Parameters:
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<DubConfig>) The dub configuration.
+
+------------------------------------------------------------------------------
+ServeD:getProfileGCEntries(bufnr)            *serve_d_utils:getProfileGCEntries*
+
+    Gets profilegc.log entries parsed and combined.
+
+    Parameters:
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<ProfileGCEntry[]>) Array of profile entries.
+
+------------------------------------------------------------------------------
+ServeD:getInfo(param, bufnr)                             *serve_d_utils:getInfo*
+
+    Gets detailed information about the serve-d instance.
+
+    Parameters:
+        {param} (ServedInfoParams): Parameters for the info.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<ServedInfoResponse>) The response data.
+
+------------------------------------------------------------------------------
+ServeD:forceLoadProjects(param, bufnr)         *serve_d_utils:forceLoadProjects*
+
+    Forces the loading of specified projects.
+
+    Parameters:
+        {param} (string[]): Array of file paths to load.
+        {bufnr} (integer?): Buffer number.
+
+    Returns:
+        (ErrorOr<boolean[]>) Array of success flags for each file.
+
+------------------------------------------------------------------------------
+ServeD:onUpdateSerring(callback)                 *serve_d_utils:onUpdateSerring*
+
+    Sets a handler for the `coded/updateSetting` notification. This notification
+    instructs the client to update a user or workspace setting.
+
+    Parameters:
+        {callback} (HandlerFor<UpdateSettingParams, nil>): A callback function
+        to handle the notification.
+
+------------------------------------------------------------------------------
+ServeD:onLogInstall(callback)                       *serve_d_utils:onLogInstall*
+
+    Sets a handler for the `coded/logInstall` notification. This notification
+    instructs the client to log a message related to the installation process.
+
+    Parameters:
+        {callback} (HandlerFor<string, nil>): A callback function to handle the
+        notification.
+
+------------------------------------------------------------------------------
+ServeD:onInitDubTree(callback)                     *serve_d_utils:onInitDubTree*
+
+    Sets a handler for the `coded/initDubTree` notification. This notification
+    informs the client that dub has been loaded, and the dependency tree can now
+    be fetched.
+
+    Parameters:
+        {callback} (HandlerFor<nil, nil>): A callback function to handle the
+        notification.
+
+------------------------------------------------------------------------------
+ServeD:onUpdateDubTree(callback)                 *serve_d_utils:onUpdateDubTree*
+
+    Sets a handler for the `coded/updateDubTree` notification. This notification
+    informs the client that dub dependencies have been reloaded and should be
+    redisplayed.
+
+    Parameters:
+        {callback} (HandlerFor<nil, nil>): A callback function to handle the
+        notification.
+
+------------------------------------------------------------------------------
+ServeD:onChangedSelectedWorkspace(callback)  *serve_d_utils:onChangedSelectedWorkspace*
+
+    Sets a handler for the `coded/changedSelectedWorkspace` notification. This
+    notification informs the client when the active workspace instance changes.
+
+    Parameters:
+        {callback} (HandlerFor<WorkspaceState, nil>): A callback function to
+        handle the notification.
+
+------------------------------------------------------------------------------
+ServeD:onSkippedLoads(callback)                   *serve_d_utils:onSkippedLoads*
+
+    Sets a handler for the `coded/skippedLoads` notification. This notification
+    informs the client that project loading was skipped for specific paths.
+
+    Parameters:
+        {callback} (HandlerFor<SkippedLoadsNotification, nil>): A callback
+        function to handle the notification.
+
+------------------------------------------------------------------------------
+ServeD:onInteractiveDownload(callback)     *serve_d_utils:onInteractiveDownload*
+
+    Sets a handler for the `coded/interactiveDownload` notification. This
+    notification instructs the client to download a file using the download UI.
+
+    Parameters:
+        {callback} (HandlerFor<InteractiveDownload, boolean>): A callback
+        function to handle the download request.
+
+==============================================================================
