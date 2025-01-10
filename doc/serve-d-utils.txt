@@ -217,7 +217,6 @@ ServeD:getArchType(param, bufnr)                     *serve_d_utils:getArchType*
     Gets the current architecture.
 
     Parameters:
-        {param} (string): Architecture name.
         {bufnr} (integer?): Buffer number.
 
     Returns:

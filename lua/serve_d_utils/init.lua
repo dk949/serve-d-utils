@@ -505,12 +505,11 @@ end
 
 ---Returns the current dub architecture or null if there is no dub in the active
 ---instance.
----@param param string
 ---@param bufnr integer?
 ---@return ErrorOr<string>
-function ServeD:getArchType(param, bufnr)
+function ServeD:getArchType(bufnr)
     local request = "served/getArchType"
-    local res = ServeD:runRequest(request, { param }, bufnr, nil)
+    local res = ServeD:runRequest(request, {}, bufnr, nil)
     ---@cast res ErrorOr<string>
     return res
 end
