@@ -218,7 +218,7 @@
 ---@class (exact) ServeD
 ---@field private serve_d vim.lsp.Client
 ---@field public timeout integer?
----@field public new fun(opts: NewOptions?): ServeD
+---@field public new fun(opts: NewOptions?): ServeD?
 ---@field public unwrap fun(e: ErrorOr<`T`>, default: `T`?): `T`
 ---@field public errCodeToStr fun(code: integer?): string
 ---@field public TaskGroup table<string, string>
