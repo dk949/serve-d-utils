@@ -465,7 +465,7 @@ ServeD:forceLoadProjects(param, bufnr)         *serve_d_utils:forceLoadProjects*
         (ErrorOr<boolean[]>) Array of success flags for each file.
 
 ------------------------------------------------------------------------------
-ServeD:onUpdateSerring(callback)                 *serve_d_utils:onUpdateSerring*
+ServeD:onUpdateSetting(callback)                 *serve_d_utils:onUpdateSetting*
 
     Sets a handler for the `coded/updateSetting` notification. This notification
     instructs the client to update a user or workspace setting.

@@ -259,7 +259,7 @@
 ---@field public forceLoadProjects fun(self: ServeD , param: string[] , bufnr: integer?): ErrorOr<boolean[]>
 ---@field public didChangeConfiguration fun(self: ServeD , param: DidChangeConfigurationParams): boolean
 ---@field public doDscanner fun(self: ServeD , param: DocumentLinkParams): boolean
----@field public onUpdateSerring fun(self: ServeD , callback: HandlerFor<UpdateSettingParams, nil>): nil
+---@field public onUpdateSetting fun(self: ServeD , callback: HandlerFor<UpdateSettingParams, nil>): nil
 ---@field public onLogInstall fun(self: ServeD , callback: HandlerFor<string, nil>): nil
 ---@field public onInitDubTree fun(self: ServeD , callback: HandlerFor<nil, nil>): nil
 ---@field public onUpdateDubTree fun(self: ServeD , callback: HandlerFor<nil, nil>): nil
@@ -805,7 +805,7 @@ end
 ---Tells the client to update a user or workspace setting. This is done for
 ---updating the dcdClientPath and dcdServerPath on installation.
 ---@param callback HandlerFor<UpdateSettingParams, nil>
-function ServeD:onUpdateSerring(callback)
+function ServeD:onUpdateSetting(callback)
     local notification = "coded/updateSetting"
     self.serve_d.handlers[notification] = callback
 end
