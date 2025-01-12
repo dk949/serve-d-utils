@@ -729,8 +729,8 @@ end
 ---where the plugin needs more direct control over the configuration.
 ---@param param DidChangeConfigurationParams
 function ServeD:didConfigurationChange(param)
-    -- TODO(dk949): make sure this is the correct spelling of the notification
-    local notification = "served/didConfigurationChange"
+function ServeD:didChangeConfiguration(param)
+    local notification = "served/didChangeConfiguration"
     return self:sendNotification(notification, param)
 end
 
