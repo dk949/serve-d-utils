@@ -224,6 +224,49 @@
 ---@field public TaskGroup table<string, string>
 ---@field public ErrorCodes table<string, integer>
 ---@field public IGNORE_ERROR vim.NIL
+---@field protected runRequest fun(self: ServeD , method: string , param: table? , bufnr: integer? , callback: lsp.Handler?): table|integer
+---@field protected sendNotification fun(self: ServeD , method: string , param: table?): boolean
+---@field public sortImports fun(self: ServeD , param: SortImportsParams , bufnr: integer?): ErrorOr<TextEdit[]>
+---@field public implementMethods fun(self: ServeD , param: ImplementMethodsParams , bufnr: integer?): ErrorOr<TextEdit[]>
+---@field public restartServer fun(self: ServeD , bufnr: integer?): ErrorOr<boolean>
+---@field public killServer fun(self: ServeD): boolean
+---@field public updateDCD fun(self: ServeD): boolean
+---@field public listConfigurations fun(self: ServeD , bufnr: integer?): ErrorOr<string[]>
+---@field public switchConfig fun(self: ServeD , param: string , bufnr: integer?): ErrorOr<boolean>
+---@field public getConfig fun(self: ServeD , bufnr: integer?): ErrorOr<string>
+---@field public listArchTypes fun(self: ServeD , param: ListArchTypesParams , bufnr: integer?): ErrorOr<string[] | ArchTypeInfo[]>
+---@field public switchArchType fun(self: ServeD , param: string , bufnr: integer?): ErrorOr<boolean>
+---@field public getArchType fun(self: ServeD , bufnr: integer?): ErrorOr<string>
+---@field public listBuildTypes fun(self: ServeD , bufnr: integer?): ErrorOr<string[]>
+---@field public switchBuildType fun(self: ServeD , param: string , bufnr: integer?): ErrorOr<boolean>
+---@field public getBuildType fun(self: ServeD , bufnr: integer?): ErrorOr<string>
+---@field public getCompiler fun(self: ServeD , bufnr: integer?): ErrorOr<string>
+---@field public switchCompiler fun(self: ServeD , param: string , bufnr: integer?): ErrorOr<boolean>
+---@field public addImport fun(self: ServeD , param: AddImportParams , bufnr: integer?): ErrorOr<ImportModification>
+---@field public updateImports fun(self: ServeD , param: UpdateImportsParams , bufnr: integer?): ErrorOr<boolean>
+---@field public listDependencies fun(self: ServeD , param: string , bufnr: integer?): ErrorOr<DubDependency[]>
+---@field public buildTasks fun(self: ServeD , bufnr: integer?): ErrorOr<Task[]>
+---@field public convertDubFormat fun(self: ServeD , param: DubConvertRequest): boolean
+---@field public installDependency fun(self: ServeD , param: InstallRequest): boolean
+---@field public updateDependency fun(self: ServeD , param: UpdateRequest): boolean
+---@field public uninstallDependency fun(self: ServeD , param: UninstallRequest): boolean
+---@field public searchFile fun(self: ServeD , query: string , bufnr: integer?): ErrorOr<string[]>
+---@field public findFilesByModule fun(self: ServeD , module: string , bufnr: integer?): ErrorOr<string[]>
+---@field public getDscannerConfig fun(self: ServeD , param: DocumentLinkParams , bufnr: integer?): ErrorOr<DScannerIniSection[]>
+---@field public getActiveDubConfig fun(self: ServeD , bufnr: integer?): ErrorOr<DubConfig>
+---@field public getProfileGCEntries fun(self: ServeD , bufnr: integer?): ErrorOr<ProfileGCEntry[]>
+---@field public getInfo fun(self: ServeD , param: ServedInfoParams , bufnr: integer?): ErrorOr<ServedInfoResponse>
+---@field public forceLoadProjects fun(self: ServeD , param: string[] , bufnr: integer?): ErrorOr<boolean[]>
+---@field public didChangeConfiguration fun(self: ServeD , param: DidChangeConfigurationParams): boolean
+---@field public doDscanner fun(self: ServeD , param: DocumentLinkParams): boolean
+---@field public onUpdateSerring fun(self: ServeD , callback: HandlerFor<UpdateSettingParams, nil>): nil
+---@field public onLogInstall fun(self: ServeD , callback: HandlerFor<string, nil>): nil
+---@field public onInitDubTree fun(self: ServeD , callback: HandlerFor<nil, nil>): nil
+---@field public onUpdateDubTree fun(self: ServeD , callback: HandlerFor<nil, nil>): nil
+---@field public onChangedSelectedWorkspace fun(self: ServeD , callback: HandlerFor<WorkspaceState, nil>): nil
+---@field public onSkippedLoads fun(self: ServeD , callback: HandlerFor<SkippedLoadsNotification, nil>): nil
+---@field public onInteractiveDownload fun(self: ServeD , callback: HandlerFor<InteractiveDownload, boolean>): nil
+
 local ServeD = {}
 
 ---@enum TaskGroup
@@ -661,6 +704,7 @@ end
 
 ---Manually triggers DScanner linting on the given file. (respecting user configuration)
 ---@param param DocumentLinkParams
+---@return boolean
 function ServeD:doDscanner(param)
     local notification = "served/doDscanner"
     return self:sendNotification(notification, param)
@@ -728,7 +772,7 @@ end
 ---notifications. This mechanisms exists to support some client/plugin combinations
 ---where the plugin needs more direct control over the configuration.
 ---@param param DidChangeConfigurationParams
-function ServeD:didConfigurationChange(param)
+---@return boolean
 function ServeD:didChangeConfiguration(param)
     local notification = "served/didChangeConfiguration"
     return self:sendNotification(notification, param)
